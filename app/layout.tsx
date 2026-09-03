@@ -6,26 +6,26 @@ import './globals.css';
    ============================================================================ */
 
 export const metadata: Metadata = {
-  title: 'Kintaro — Full Stack Developer',
+  title: 'Mohammad Moghraby — Web Developer',
   description:
-    'Kintaro portfolio — web and desktop applications built with practical, sustainable tools.',
+    'Mohammad Moghraby portfolio — web and desktop applications built with practical, sustainable tools.',
   openGraph: {
-    title: 'Kintaro Portfolio',
-    description: 'Full Stack Developer',
+    title: 'Mohammad Moghraby Portfolio',
+    description: 'Web Developer',
     type: 'website',
     images: [
       {
         url: '/og.png',
         width: 1200,
         height: 630,
-        alt: 'Kintaro Portfolio',
+        alt: 'Mohammad Moghraby Portfolio',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Kintaro Portfolio',
-    description: 'Full Stack Developer',
+    title: 'Mohammad Moghraby Portfolio',
+    description: 'Web Developer',
     images: ['/og.png'],
   },
 };
