@@ -54,3 +54,29 @@ html{scroll-snap-type:none;scroll-padding-top:0}section[id]{scroll-snap-align:no
   .portrait.p2{display:block}
 }
 @media(prefers-reduced-motion:reduce){.hero-copy,.portrait-wall,.content-section>*,.marquee>div,.projects-intro,.project-card{filter:none!important;opacity:1!important}}
+
+/* Circular theme reveal powered by the native View Transitions API. */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:1}
+::view-transition-new(root){z-index:9999;animation:theme-circle-reveal .5s ease-in-out both}
+@keyframes theme-circle-reveal{
+  from{clip-path:circle(0 at var(--theme-transition-x,calc(100% - 65px)) var(--theme-transition-y,42px)))}
+  to{clip-path:circle(var(--theme-transition-radius,150vmax) at var(--theme-transition-x,calc(100% - 65px)) var(--theme-transition-y,42px)))}
+}
+
+.theme-toggle{position:relative;overflow:hidden;isolation:isolate}
+.theme-toggle span{position:absolute;inset:0;display:grid;place-items:center;font-size:1.1rem;transition:transform .5s cubic-bezier(.65,0,.35,1),opacity .3s ease}
+.theme-sun{transform:rotate(-120deg) scale(.35);opacity:0}
+.theme-moon{transform:rotate(0) scale(1);opacity:1}
+.theme-toggle.is-light .theme-sun{transform:rotate(0) scale(1);opacity:1}
+.theme-toggle.is-light .theme-moon{transform:rotate(120deg) scale(.35);opacity:0}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}.theme-toggle span{transition:none}}
+
+/* Circular theme reveal powered by the native View Transitions API. */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-old(root){z-index:1}
+::view-transition-new(root){z-index:2;animation:theme-circle-reveal .5s ease-in-out both}
+@keyframes theme-circle-reveal{from{clip-path:circle(0 at var(--theme-transition-x) var(--theme-transition-y))}to{clip-path:circle(var(--theme-transition-radius) at var(--theme-transition-x) var(--theme-transition-y))}}
+
+.theme-toggle{position:relative;overflow:hidden;isolation:isolate}.theme-toggle span{position:absolute;inset:0;display:grid;place-items:center;font-size:1.1rem;transition:transform .5s ease-in-out,opacity .35s ease}.theme-sun{opacity:0;transform:rotate(-110deg) scale(.35)}.theme-moon{opacity:1;transform:rotate(0) scale(1)}.theme-toggle.is-light .theme-sun{opacity:1;transform:rotate(0) scale(1)}.theme-toggle.is-light .theme-moon{opacity:0;transform:rotate(110deg) scale(.35)}
+@media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}.theme-toggle span{transition:none}}
