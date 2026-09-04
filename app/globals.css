@@ -73,6 +73,26 @@ html{scroll-snap-type:none;scroll-padding-top:0}section[id]{scroll-snap-align:no
 .theme-toggle.is-light .theme-moon{transform:rotate(120deg) scale(.35);opacity:0}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}.theme-toggle span{transition:none}}
 
+/* Infinite bottom-to-top hero image reels: two columns on desktop, one on mobile. */
+.portrait-wall{right:3%;top:0;width:46%;height:112%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:1fr;gap:14px;overflow:hidden;transform:rotate(-1deg);mask-image:linear-gradient(to bottom,transparent 0,#000 7%,#000 91%,transparent 100%)}
+.portrait-column{min-width:0;overflow:hidden}
+.portrait-column-2{transform:translateY(-9%)}
+.portrait-track{display:flex;flex-direction:column;will-change:transform;animation:hero-image-reel 28s linear infinite}
+.portrait-column-2 .portrait-track{animation-duration:34s;animation-delay:-11s}
+.portrait-set{display:flex;flex-direction:column;gap:14px;padding-bottom:14px}
+.portrait{flex:0 0 auto;width:100%;height:clamp(190px,27vh,310px);min-height:0;border-radius:22px;overflow:hidden;opacity:.62;filter:grayscale(1);animation:none!important;transform:none!important}
+.portrait img{width:100%;height:100%;object-fit:cover;transform:none!important;will-change:auto}
+@keyframes hero-image-reel{to{transform:translate3d(0,-50%,0)}}
+@media(max-width:900px){
+  .portrait-wall{inset:64px 4% auto auto;width:58%;height:78%;display:block;transform:rotate(-1deg)}
+  .portrait-column-2{display:none}
+  .portrait-track{animation-duration:25s}
+  .portrait-set{gap:11px;padding-bottom:11px}
+  .portrait{display:block!important;height:clamp(190px,34vh,285px);border-radius:18px}
+}
+@media(max-width:560px){.portrait-wall{right:3%;top:68px;width:56%;height:70%}}
+@media(prefers-reduced-motion:reduce){.portrait-track{animation-play-state:paused;transform:translateY(-8%)}}
+
 /* Circular theme reveal powered by the native View Transitions API. */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){z-index:1}
