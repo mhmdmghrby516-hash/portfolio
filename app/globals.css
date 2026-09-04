@@ -32,3 +32,6 @@ html{scroll-snap-type:none;scroll-padding-top:0}section[id]{scroll-snap-align:no
 /* Six-panel hero portrait wall */
 @media(min-width:901px){.portrait-wall{right:6%;top:22px;width:36%;height:132%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(3,30%);gap:16px;transform:none}.portrait{min-height:0;border-radius:22px;opacity:.58}.portrait.p1{grid-row:auto}.portrait:nth-child(even){transform:translateY(28px);animation-name:float-even}.portrait:nth-child(3){animation-delay:-1.2s}.portrait:nth-child(4){animation-delay:-4.3s}.portrait:nth-child(5){animation-delay:-2.4s}.portrait:nth-child(6){animation-delay:-5.2s}.hero:after{background:radial-gradient(circle at 75% 42%,transparent 0 8%,var(--bg) 58%),linear-gradient(90deg,var(--bg) 0 44%,transparent 72%)}}@keyframes float-even{0%,100%{transform:translateY(28px)}50%{transform:translateY(14px)}}
 @media(max-width:900px){.portrait-wall .p3,.portrait-wall .p4,.portrait-wall .p5,.portrait-wall .p6{display:none}}
+
+/* Slightly lift the primary hero content after removing the decorative rail. */
+.hero-copy{position:relative;top:-24px}
