@@ -800,28 +800,25 @@ export default function Home() {
           </div>
         </div>
         <div className="portrait-wall" aria-hidden="true">
-          {[portraits.slice(0, 3), portraits.slice(3, 6)].map(
-            (column, columnIndex) => (
-              <div
-                className={`portrait-column portrait-column-${columnIndex + 1}`}
-                key={columnIndex}
-              >
-                <div className="portrait-track">
-                  <div className="portrait-set">
-                    {column.map((src, imageIndex) => (
-                      <div className="portrait" key={src}>
-                        <img
-                          src={src}
-                          alt=""
-                          loading={imageIndex === 0 ? "eager" : "lazy"}
-                        />
-                      </div>
-                    ))}
-                  </div>
+          <div className="portrait-column portrait-column-1">
+            <div className="portrait-track">
+              {[0, 1].map((copy) => (
+                <div className="portrait-set" key={copy}>
+                  {portraits.map((src, imageIndex) => (
+                    <div className="portrait" key={`${copy}-${src}`}>
+                      <img
+                        src={src}
+                        alt=""
+                        loading={
+                          copy === 0 && imageIndex === 0 ? "eager" : "lazy"
+                        }
+                      />
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ),
-          )}
+              ))}
+            </div>
+          </div>
         </div>
       </section>
       <section id="about" className="content-section about">
