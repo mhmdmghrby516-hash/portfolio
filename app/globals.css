@@ -204,3 +204,17 @@ footer .copyright{width:min(820px,90vw)}
   .social-pills button{min-height:54px;padding:12px 17px}
   footer .copyright{width:100%}
 }
+
+/* Light-mode header colors tuned independently for crisp navigation contrast. */
+:root[data-theme="light"] header{color:#0a2734;background:linear-gradient(180deg,rgba(234,247,251,.97) 0%,rgba(234,247,251,.82) 64%,transparent 100%)}
+:root[data-theme="light"] .brand{color:#06151f}
+:root[data-theme="light"] nav button{color:#345766;opacity:.82}
+:root[data-theme="light"] nav button:hover,
+:root[data-theme="light"] nav button:focus-visible{color:var(--accent);opacity:1}
+:root[data-theme="light"] .controls button{color:#075f75;border-color:#8fb8c7;background:rgba(249,253,255,.58);box-shadow:0 8px 24px rgba(20,67,86,.08)}
+:root[data-theme="light"] .controls button:hover,
+:root[data-theme="light"] .controls button:focus-visible{color:#f3fcff;background:#075f75;border-color:#075f75;box-shadow:0 12px 28px rgba(7,95,117,.18)}
+:root[data-theme="light"] .theme-sun{color:#007f9c}
+:root[data-theme="light"] .controls button:hover .theme-sun,
+:root[data-theme="light"] .controls button:focus-visible .theme-sun{color:#f3fcff}
+@media(max-width:900px){:root[data-theme="light"] nav{background:rgba(224,241,247,.96);border-color:#adcbd6;box-shadow:0 16px 40px rgba(20,67,86,.12)}}
