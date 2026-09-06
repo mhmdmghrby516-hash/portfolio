@@ -139,6 +139,9 @@ nav button:after{background:var(--accent);box-shadow:0 0 9px var(--accent-soft)}
 @media(max-width:900px){.social-pills{width:100%;grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.social-pills{grid-template-columns:1fr}.social-pills button{min-height:58px;padding:14px 17px}}
 
+/* The custom circle is the visible pointer on mouse-driven devices. */
+@media(pointer:fine){html,body,body *,a,button,[role="button"]{cursor:none!important}}
+
 /* Circular theme reveal powered by the native View Transitions API. */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){z-index:1}
