@@ -1,15 +1,15 @@
 "use client";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from "react";
 import { flushSync } from "react-dom";
 import { animate, splitText, stagger } from "animejs";
 import MotionHangingCard from "./components/HangingCard";
 const portraits = [
-  "hero-portraits/portrait-1.jpg",
-  "hero-portraits/portrait-2.jpg",
-  "hero-portraits/portrait-3.jpg",
-  "hero-portraits/portrait-4.jpg",
-  "hero-portraits/portrait-5.jpg",
-  "hero-portraits/portrait-6.jpg",
+  { src: "hero-portraits/portrait-1.jpg", width: 722, height: 1280 },
+  { src: "hero-portraits/portrait-2.jpg", width: 1103, height: 1280 },
+  { src: "hero-portraits/portrait-3.jpg", width: 720, height: 1280 },
+  { src: "hero-portraits/portrait-4.jpg", width: 736, height: 1100 },
+  { src: "hero-portraits/portrait-5.jpg", width: 736, height: 736 },
+  { src: "hero-portraits/portrait-6.jpg", width: 736, height: 736 },
 ];
 const techGroups = [
   [
@@ -810,11 +810,17 @@ export default function Home() {
             <div className="portrait-track">
               {[0, 1].map((copy) => (
                 <div className="portrait-set" key={copy}>
-                  {portraits.map((src, imageIndex) => (
-                    <div className="portrait" key={`${copy}-${src}`}>
+                  {portraits.map(({ src, width, height }, imageIndex) => (
+                    <div
+                      className="portrait"
+                      key={`${copy}-${src}`}
+                      style={{ "--portrait-ratio": `${width} / ${height}` } as CSSProperties}
+                    >
                       <img
                         src={src}
                         alt=""
+                        width={width}
+                        height={height}
                         loading={
                           copy === 0 && imageIndex === 0 ? "eager" : "lazy"
                         }
