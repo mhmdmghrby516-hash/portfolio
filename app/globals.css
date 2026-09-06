@@ -73,6 +73,12 @@ html{scroll-snap-type:none;scroll-padding-top:0}section[id]{scroll-snap-align:no
 .theme-toggle.is-light .theme-moon{transform:rotate(120deg) scale(.35);opacity:0}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}.theme-toggle span{transition:none}}
 
+/* Anime.js split-text title entrance. */
+.hero h1 .surname{color:#c8c8c8}
+.hero-title-line{overflow:hidden}
+.hero h1 .hero-title-char{display:inline-block;color:inherit;will-change:transform,opacity}
+@media(prefers-reduced-motion:reduce){.hero-title-char{will-change:auto}}
+
 /* Deep navy portfolio backdrop with a restrained cyan atmospheric glow. */
 :root{
   --page-bg:

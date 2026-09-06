@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { flushSync } from "react-dom";
+import { animate, splitText, stagger } from "animejs";
 import MotionHangingCard from "./components/HangingCard";
 const portraits = [
   "makise-kurisu-2.webp",
@@ -521,6 +522,37 @@ export default function Home() {
   const [light, setLight] = useState(false);
   const [menu, setMenu] = useState(false);
   const projectTrack = useRef<HTMLDivElement>(null);
+  const heroTitle = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (
+      !heroTitle.current ||
+      matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    const split = splitText(heroTitle.current, {
+      lines: { wrap: "clip", class: "hero-title-line" },
+      chars: { class: "hero-title-char" },
+      accessible: true,
+    });
+
+    split.addEffect(({ chars }) =>
+      animate(chars, {
+        opacity: { from: 0 },
+        y: { from: "115%" },
+        rotate: { from: 3 },
+        scale: { from: 0.96 },
+        duration: 950,
+        delay: stagger(28, { start: 140 }),
+        ease: "out(4)",
+      }),
+    );
+
+    return () => {
+      split.revert();
+    };
+  }, []);
   useEffect(() => {
     const io = new IntersectionObserver(
       (es) =>
@@ -740,10 +772,10 @@ export default function Home() {
         <div className="stars" />
         <div className="hero-copy reveal visible">
           <p className="eyebrow">WEB DEVELOPER · 2026</p>
-          <h1>
+          <h1 ref={heroTitle}>
             MOHAMMAD
             <br />
-            <span>MOGHRABY</span>
+            <span className="surname">MOGHRABY</span>
           </h1>
           <p className="intro">
             I&apos;m someone who loves <b>learning new things</b> and constantly
