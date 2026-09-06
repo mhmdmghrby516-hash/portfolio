@@ -75,7 +75,12 @@ const years = [
     "Laravel · Next.js · PostgreSQL",
   ],
 ];
-const socialNames = ["GitHub", "Discord", "Instagram", "LinkedIn"];
+const socialItems = [
+  { name: "GitHub", icon: "◉" },
+  { name: "Discord", icon: "◈" },
+  { name: "Instagram", icon: "◎" },
+  { name: "LinkedIn", icon: "in" },
+];
 function SectionTitle({ number, title }: { number: string; title: string }) {
   return (
     <div className="section-title reveal">
@@ -926,16 +931,19 @@ export default function Home() {
             © 2026 <b>MOHAMMAD MOGHRABY.</b> All rights reserved.
           </div>
           <div className="social-pills" aria-label="Social platforms">
-            {socialNames.map((name) => (
-              <button
-                type="button"
-                key={name}
-                aria-label={`${name} link coming soon`}
-              >
-                {name}
-                <span>↗</span>
-              </button>
-            ))}
+              {socialItems.map(({ name, icon }) => (
+                <button
+                  type="button"
+                  key={name}
+                  aria-label={`${name} link coming soon`}
+                >
+                  <span className="social-label">{name}</span>
+                  <span className="social-icon" aria-hidden="true">
+                    <i>{icon}</i>
+                    <i>↗</i>
+                  </span>
+                </button>
+              ))}
           </div>
         </footer>
       </section>
