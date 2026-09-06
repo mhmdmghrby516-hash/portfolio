@@ -218,3 +218,7 @@ footer .copyright{width:min(820px,90vw)}
 :root[data-theme="light"] .controls button:hover .theme-sun,
 :root[data-theme="light"] .controls button:focus-visible .theme-sun{color:#f3fcff}
 @media(max-width:900px){:root[data-theme="light"] nav{background:rgba(224,241,247,.96);border-color:#adcbd6;box-shadow:0 16px 40px rgba(20,67,86,.12)}}
+
+/* Each supplied hero portrait appears once; columns drift without cloned sets. */
+.portrait-track{animation-name:hero-portrait-drift;animation-timing-function:ease-in-out;animation-direction:alternate}
+@keyframes hero-portrait-drift{from{transform:translate3d(0,-2%,0)}to{transform:translate3d(0,-12%,0)}}

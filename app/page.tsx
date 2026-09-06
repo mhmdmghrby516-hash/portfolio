@@ -4,13 +4,13 @@ import { flushSync } from "react-dom";
 import { animate, splitText, stagger } from "animejs";
 import MotionHangingCard from "./components/HangingCard";
 const portraits = [
-  "makise-kurisu-2.webp",
-  "atam-1.webp",
-  "kintaro-2.webp",
-  "makise-kurisu-1.webp",
-  "atam-2.webp",
-  "kintaro-1.webp",
-].map((n) => `https://www.xkintaro.com/hero-slider/${n}`);
+  "hero-portraits/portrait-1.jpg",
+  "hero-portraits/portrait-2.jpg",
+  "hero-portraits/portrait-3.jpg",
+  "hero-portraits/portrait-4.jpg",
+  "hero-portraits/portrait-5.jpg",
+  "hero-portraits/portrait-6.jpg",
+];
 const techGroups = [
   [
     "Frontend Technologies",
@@ -804,28 +804,24 @@ export default function Home() {
           </div>
         </div>
         <div className="portrait-wall" aria-hidden="true">
-          {[portraits, [...portraits.slice(3), ...portraits.slice(0, 3)]].map(
+          {[portraits.slice(0, 3), portraits.slice(3, 6)].map(
             (column, columnIndex) => (
               <div
                 className={`portrait-column portrait-column-${columnIndex + 1}`}
                 key={columnIndex}
               >
                 <div className="portrait-track">
-                  {[0, 1].map((copy) => (
-                    <div className="portrait-set" key={copy}>
-                      {column.map((src, imageIndex) => (
-                        <div className="portrait" key={`${copy}-${src}`}>
-                          <img
-                            src={src}
-                            alt=""
-                            loading={
-                              imageIndex < 2 && copy === 0 ? "eager" : "lazy"
-                            }
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ))}
+                  <div className="portrait-set">
+                    {column.map((src, imageIndex) => (
+                      <div className="portrait" key={src}>
+                        <img
+                          src={src}
+                          alt=""
+                          loading={imageIndex === 0 ? "eager" : "lazy"}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             ),
