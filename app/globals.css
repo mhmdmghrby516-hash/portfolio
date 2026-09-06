@@ -222,3 +222,7 @@ footer .copyright{width:min(820px,90vw)}
 /* Each supplied hero portrait appears once; columns drift without cloned sets. */
 .portrait-track{animation-name:hero-portrait-drift;animation-timing-function:ease-in-out;animation-direction:alternate}
 @keyframes hero-portrait-drift{from{transform:translate3d(0,-2%,0)}to{transform:translate3d(0,-12%,0)}}
+
+/* Intentionally empty project slots, ready for the next project set. */
+.project-card-empty .project-image{border:1px solid color-mix(in srgb,var(--line) 72%,transparent);background:color-mix(in srgb,var(--panel) 46%,transparent);box-shadow:inset 0 1px 0 color-mix(in srgb,var(--fg) 4%,transparent)}
+.project-card-empty:hover{transform:none}

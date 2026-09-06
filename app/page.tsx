@@ -44,11 +44,7 @@ const techIcon = (name: string) =>
   name === "Neon"
     ? "https://www.xkintaro.com/stack/neon.png"
     : `https://www.xkintaro.com/stack/${techSlugs[name] || name.toLowerCase().replace(/[^a-z0-9]/g, "")}.svg`;
-const projects = [
-  ["Aether Media", "Media Tool", "2026", "20260427093247885.jpg"],
-  ["Aether JS", "Library", "2026", "20260427093247620.jpg"],
-  ["File Manager", "Web Application", "2025", "20260305210513749.jpg"],
-];
+const projects = ["project-slot-1", "project-slot-2", "project-slot-3"];
 const years = [
   [
     "2022",
@@ -882,27 +878,22 @@ export default function Home() {
             <div className="projects-intro">
               <SectionTitle number="003" title="Projects" />
               <p className="reveal">
-                A collection of <em>experiments</em>, <em>products</em>, and{" "}
-                <em>digital artifacts</em> forged in the <strong>void</strong>.
+                A growing archive of <em>ideas</em> shaped through code,{
+                " "}
+                <em>curiosity</em>, and thoughtful <strong>experimentation</strong>.
               </p>
               <div className="explore-line">
                 <i />
                 SCROLL TO EXPLORE
               </div>
             </div>
-            {projects.map(([name, type, year, img]) => (
-              <article className="project-card reveal" key={name}>
-                <div className="project-image">
-                  <img
-                    src={`https://www.xkintaro.com/projects/${img}`}
-                    alt={name}
-                  />
-                  <div className="project-meta">
-                    <span>{type}</span>
-                    <b>{year}</b>
-                  </div>
-                  <h3>{name}</h3>
-                </div>
+            {projects.map((slot) => (
+              <article
+                className="project-card project-card-empty reveal"
+                key={slot}
+                aria-hidden="true"
+              >
+                <div className="project-image" />
               </article>
             ))}
           </div>
