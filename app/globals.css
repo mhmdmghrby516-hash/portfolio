@@ -113,6 +113,11 @@ html{scroll-snap-type:none;scroll-padding-top:0}section[id]{scroll-snap-align:no
 @media(max-width:900px){.about-side .badge-rig{display:flex;width:min(300px,100%);height:350px;margin-inline:auto}.hanging-card .badge-card{width:132px}}
 @media(prefers-reduced-motion:reduce){.hanging-card .badge-card{transform:translate3d(80px,184px,0)!important}.hanging-rope path{d:path("M 150 0 L 150 184")}}
 
+/* Reference-matched navigation hover */
+nav button{position:relative;padding:10px 0;opacity:.62;transition:color .3s ease,opacity .3s ease}nav button:after{content:"";position:absolute;left:0;bottom:3px;width:0;height:1px;background:currentColor;transition:width .3s cubic-bezier(.22,.61,.36,1)}nav button:hover,nav button:focus-visible{opacity:1}nav button:hover:after,nav button:focus-visible:after{width:100%}
+.controls button{position:relative;isolation:isolate;overflow:hidden;transition:background .5s ease,color .5s ease,border-color .5s ease,transform .5s ease}.controls button:before{content:"";position:absolute;z-index:-1;inset:-20%;width:18px;height:140%;background:color-mix(in srgb,var(--bg) 22%,transparent);transform:translateX(-70px) skewX(-13deg);transition:transform 0s}.controls button:hover,.controls button:focus-visible{background:var(--fg);color:var(--bg);border-color:color-mix(in srgb,var(--fg) 30%,transparent);transform:translateY(-1px)}.controls button:hover:before,.controls button:focus-visible:before{transform:translateX(105px) skewX(-13deg);transition:transform 1s ease}.controls button:hover .theme-sun,.controls button:hover .theme-moon{rotate:12deg}
+@media(prefers-reduced-motion:reduce){nav button:after,.controls button,.controls button:before{transition:none!important}}
+
 /* Circular theme reveal powered by the native View Transitions API. */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){z-index:1}
