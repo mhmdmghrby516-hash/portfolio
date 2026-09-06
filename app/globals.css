@@ -123,6 +123,10 @@ nav button{position:relative;padding:10px 0;opacity:.62;transition:color .3s eas
 .hanging-card .badge-card{box-shadow:0 calc(30px + var(--card-hover-shadow,0px)) calc(70px + var(--card-hover-shadow,0px)) #0006,0 1px 0 color-mix(in srgb,var(--bg) 12%,transparent) inset;transition:box-shadow .35s ease,border-color .35s ease}.hanging-card .badge-card:hover{border-color:color-mix(in srgb,var(--bg) 28%,transparent)}
 @media(pointer:coarse){.hanging-card .badge-card{transition:box-shadow .5s ease}}
 
+/* Larger desktop playground; hidden completely on mobile. */
+.about-side .badge-rig{width:340px;height:390px}
+@media(max-width:900px){.about-side .badge-rig{display:none;width:0;height:0;margin:0}}
+
 /* Circular theme reveal powered by the native View Transitions API. */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){z-index:1}
