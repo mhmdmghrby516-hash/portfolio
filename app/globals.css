@@ -93,6 +93,15 @@ html{scroll-snap-type:none;scroll-padding-top:0}section[id]{scroll-snap-align:no
 @media(max-width:560px){.portrait-wall{right:3%;top:68px;width:56%;height:70%}}
 @media(prefers-reduced-motion:reduce){.portrait-track{animation-play-state:paused;transform:translateY(-8%)}}
 
+/* Mouse-following hero cursor and depth particles */
+.hero-effects{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden}.hero-particles{position:absolute;inset:0}.hero-particle{position:absolute;display:block;border-radius:50%;background:var(--fg);box-shadow:0 0 8px color-mix(in srgb,var(--fg) 35%,transparent);will-change:transform;transition:opacity .4s ease}.hero-cursor{position:absolute;left:0;top:0;width:42px;height:42px;margin:-21px 0 0 -21px;border:1px solid color-mix(in srgb,var(--fg) 48%,transparent);border-radius:50%;opacity:0;will-change:transform;transition:opacity .25s ease,width .25s ease,height .25s ease,margin .25s ease}.hero-cursor span{position:absolute;left:50%;top:50%;width:4px;height:4px;border-radius:50%;background:var(--fg);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--fg)}.hero.cursor-active .hero-cursor{opacity:1}.hero:has(button:hover) .hero-cursor{width:58px;height:58px;margin:-29px 0 0 -29px;background:color-mix(in srgb,var(--fg) 7%,transparent)}
+
+/* Decorative social controls: intentionally not linked yet */
+.social-pills button{min-height:64px;margin:0;border:1px solid var(--line);border-radius:999px;display:flex;align-items:center;justify-content:center;gap:18px;padding:15px 24px;color:var(--fg);background:transparent;text-transform:uppercase;font-size:.72rem;font-weight:700;letter-spacing:.14em;box-shadow:0 8px 20px #0002;transition:background .45s ease,color .45s ease,border-color .45s ease,transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s ease}.social-pills button span{font-size:1rem;transition:transform .45s cubic-bezier(.2,.8,.2,1)}.social-pills button:hover,.social-pills button:focus-visible{background:var(--invert);color:var(--invfg);border-color:var(--invert);transform:translateY(-5px);box-shadow:0 16px 34px #0003}.social-pills button:hover span,.social-pills button:focus-visible span{transform:translate(4px,-4px)}
+@media(max-width:560px){.social-pills button{min-height:56px;padding:13px 16px;font-size:.66rem;letter-spacing:.11em}}
+@media(pointer:coarse){.hero-cursor{display:none}.hero-particle{transform:none!important}}
+@media(prefers-reduced-motion:reduce){.hero-cursor{display:none}.hero-particle{transform:none!important}}
+
 /* Circular theme reveal powered by the native View Transitions API. */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){z-index:1}
