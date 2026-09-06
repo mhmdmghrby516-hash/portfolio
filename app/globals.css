@@ -238,3 +238,7 @@ footer .copyright{width:min(820px,90vw)}
   .portrait-track{animation-duration:34s}
 }
 @media(max-width:560px){.portrait-wall{right:3%;width:62%;height:76%}.portrait{height:clamp(220px,36vh,300px)}}
+
+/* Center the quick-link group within the footer. */
+footer{align-items:center}
+.social-pills{margin-inline:auto}
