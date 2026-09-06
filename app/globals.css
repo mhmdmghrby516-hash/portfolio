@@ -73,6 +73,17 @@ html{scroll-snap-type:none;scroll-padding-top:0}section[id]{scroll-snap-align:no
 .theme-toggle.is-light .theme-moon{transform:rotate(120deg) scale(.35);opacity:0}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}.theme-toggle span{transition:none}}
 
+/* Deep navy portfolio backdrop with a restrained cyan atmospheric glow. */
+:root{
+  --page-bg:
+    radial-gradient(circle at 88% 8%,rgba(0,212,255,.055),transparent 28%),
+    radial-gradient(circle at 8% 62%,rgba(24,40,112,.14),transparent 34%),
+    linear-gradient(145deg,#020024 0%,#050512 42%,#080808 100%);
+}
+:root[data-theme="light"]{--page-bg:var(--bg)}
+html,body{background:var(--page-bg);background-attachment:fixed}
+.content-section,.marquee{background:var(--page-bg);background-attachment:fixed}
+
 /* Keep the legal line beneath the quick-link cards. */
 footer{flex-direction:column;align-items:flex-end;gap:28px}
 footer .copyright{width:min(620px,58vw);justify-content:flex-start;text-align:left}
