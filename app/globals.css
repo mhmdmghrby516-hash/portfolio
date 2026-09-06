@@ -73,6 +73,10 @@ html{scroll-snap-type:none;scroll-padding-top:0}section[id]{scroll-snap-align:no
 .theme-toggle.is-light .theme-moon{transform:rotate(120deg) scale(.35);opacity:0}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}.theme-toggle span{transition:none}}
 
+/* Official social brand marks inside the quick-link controls. */
+.social-icon img{display:block;width:15px;height:15px;object-fit:contain;filter:invert(1);opacity:.92}
+:root[data-theme="light"] .social-icon img{filter:invert(0)}
+
 /* Anime.js split-text title entrance. */
 .hero h1 .surname{color:#c8c8c8}
 .hero-title-line{overflow:hidden}

@@ -77,10 +77,10 @@ const years = [
   ],
 ];
 const socialItems = [
-  { name: "GitHub", icon: "◉" },
-  { name: "Discord", icon: "◈" },
-  { name: "Instagram", icon: "◎" },
-  { name: "LinkedIn", icon: "in" },
+  { name: "GitHub", icon: "github" },
+  { name: "Discord", icon: "discord" },
+  { name: "Instagram", icon: "instagram" },
+  { name: "LinkedIn", icon: "linkedin" },
 ];
 function SectionTitle({ number, title }: { number: string; title: string }) {
   return (
@@ -966,11 +966,13 @@ export default function Home() {
                 key={name}
                 aria-label={`${name} link coming soon`}
               >
-                <span className="social-label">{name}</span>
-                <span className="social-icon" aria-hidden="true">
-                  <i>{icon}</i>
-                  <i>↗</i>
-                </span>
+                  <span className="social-label">{name}</span>
+                  <span className="social-icon" aria-hidden="true">
+                    <i>
+                      <img src={`social-icons/${icon}.svg`} alt="" />
+                    </i>
+                    <i>↗</i>
+                  </span>
               </button>
             ))}
           </div>
