@@ -29,27 +29,28 @@ export default function HangingCard({ children, className = "", ariaLabel = "Dra
   const y = useMotionValue(0);
   const pointerTiltX = useMotionValue(0);
   const pointerTiltY = useMotionValue(0);
-  const smoothX = useSpring(x, { stiffness: 105, damping: 18, mass: 0.7 });
-  const smoothY = useSpring(y, { stiffness: 120, damping: 20, mass: 0.75 });
-  const velocityX = useVelocity(smoothX);
-  const baseRotation = useTransform([smoothX, velocityX], ([position, velocity]) => {
+  const velocityX = useVelocity(x);
+  const velocityY = useVelocity(y);
+  const baseRotation = useTransform([x, velocityX], ([position, velocity]) => {
     const range = size.width < 260 ? 7 : 11;
-    return Math.max(-range, Math.min(range, Number(position) * 0.055 + Number(velocity) * 0.012));
+    return Math.max(-range, Math.min(range, Number(position) * 0.065 + Number(velocity) * 0.016));
   });
-  const rotation = useSpring(baseRotation, { stiffness: 130, damping: 17 });
+  const rotation = useSpring(baseRotation, { stiffness: 115, damping: 14, mass: 0.72 });
   const tiltX = useSpring(pointerTiltX, { stiffness: 150, damping: 20 });
   const tiltY = useSpring(pointerTiltY, { stiffness: 150, damping: 20 });
   const anchorX = size.width / 2;
   const anchorY = 10;
   const ropeLength = Math.max(145, Math.min(185, size.height * 0.5));
-  const ropePath = useTransform([smoothX, smoothY], ([offsetX, offsetY]) => {
+  const ropePath = useTransform([x, y, velocityX, velocityY], ([offsetX, offsetY, speedX, speedY]) => {
     const endX = anchorX + Number(offsetX);
     const endY = anchorY + ropeLength + Number(offsetY);
-    const bend = Number(offsetX) * 0.44;
-    const control1X = anchorX + bend * 0.18;
-    const control1Y = anchorY + ropeLength * 0.34;
-    const control2X = endX - bend * 0.2;
-    const control2Y = endY - ropeLength * 0.34;
+    const direction = Number(offsetX);
+    const trailingForce = Math.max(-34, Math.min(34, -Number(speedX) * 0.025));
+    const verticalLag = Math.max(-10, Math.min(10, -Number(speedY) * 0.012));
+    const control1X = anchorX + direction * 0.08 + trailingForce * 0.18;
+    const control1Y = anchorY + ropeLength * 0.32;
+    const control2X = endX - direction * 0.24 + trailingForce;
+    const control2Y = endY - ropeLength * 0.28 + verticalLag;
     return `M ${anchorX} ${anchorY} C ${control1X} ${control1Y}, ${control2X} ${control2Y}, ${endX} ${endY}`;
   });
 
@@ -86,8 +87,26 @@ export default function HangingCard({ children, className = "", ariaLabel = "Dra
   }, [reducedMotion, startIdle, stopIdle, x, y]);
 
   const finishDrag = () => {
-    const returnX = animate(x, 0, { type: "spring", stiffness: 48, damping: 8, mass: 0.85 });
-    const returnY = animate(y, 0, { type: "spring", stiffness: 58, damping: 10, mass: 0.8 });
+    const releaseX = velocityX.get();
+    const releaseY = velocityY.get();
+    const returnX = animate(x, 0, {
+      type: "spring",
+      velocity: releaseX,
+      stiffness: 44,
+      damping: 8.5,
+      mass: 0.92,
+      restSpeed: 3,
+      restDelta: 0.35,
+    });
+    const returnY = animate(y, 0, {
+      type: "spring",
+      velocity: releaseY * 0.45,
+      stiffness: 62,
+      damping: 11,
+      mass: 0.82,
+      restSpeed: 3,
+      restDelta: 0.35,
+    });
     Promise.all([returnX, returnY]).then(startIdle).catch(() => undefined);
   };
 
@@ -127,8 +146,7 @@ export default function HangingCard({ children, className = "", ariaLabel = "Dra
         drag={!reducedMotion}
         dragConstraints={{ left: -horizontalRange, right: horizontalRange, top: -verticalRange, bottom: verticalRange }}
         dragElastic={0.12}
-        dragMomentum
-        dragTransition={{ power: 0.14, timeConstant: 260, bounceStiffness: 180, bounceDamping: 22 }}
+        dragMomentum={false}
         onDragStart={stopIdle}
         onDragEnd={finishDrag}
       >
@@ -138,7 +156,7 @@ export default function HangingCard({ children, className = "", ariaLabel = "Dra
           aria-label={ariaLabel}
           style={{ rotateZ: rotation, rotateX: tiltX, rotateY: tiltY }}
           whileHover={reducedMotion ? undefined : { scale: 1.055 }}
-          whileTap={reducedMotion ? undefined : { scale: 1.025, cursor: "grabbing" }}
+          whileTap={reducedMotion ? undefined : { scale: 1.035, cursor: "grabbing" }}
           onPointerMove={moveTilt}
           onPointerLeave={resetTilt}
         >
