@@ -176,3 +176,12 @@ nav button:after{background:var(--accent);box-shadow:0 0 9px var(--accent-soft)}
 
 .theme-toggle{position:relative;overflow:hidden;isolation:isolate}.theme-toggle span{position:absolute;inset:0;display:grid;place-items:center;font-size:1.1rem;transition:transform .5s ease-in-out,opacity .35s ease}.theme-sun{opacity:0;transform:rotate(-110deg) scale(.35)}.theme-moon{opacity:1;transform:rotate(0) scale(1)}.theme-toggle.is-light .theme-sun{opacity:1;transform:rotate(0) scale(1)}.theme-toggle.is-light .theme-moon{opacity:0;transform:rotate(110deg) scale(.35)}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}.theme-toggle span{transition:none}}
+
+/* Unified cool-toned palette built around the deep navy background. */
+:root{--bg:#040612;--fg:#edf8ff;--muted:#8fa6b5;--line:#1d3444;--panel:#0b1420;--invert:#dff8ff;--invfg:#031019;--accent:#00d4ff;--accent-soft:rgba(0,212,255,.2);--title-secondary:#a9c5d4;--page-bg:radial-gradient(circle at 88% 8%,rgba(0,212,255,.075),transparent 29%),radial-gradient(circle at 8% 62%,rgba(32,61,151,.18),transparent 36%),linear-gradient(145deg,#020024 0%,#040817 44%,#05080e 100%)}
+:root[data-theme="light"]{--bg:#eef7fa;--fg:#07151c;--muted:#526a76;--line:#bed0d8;--panel:#dcebef;--invert:#07151c;--invfg:#f4fcff;--accent:#008eae;--accent-soft:rgba(0,142,174,.18);--title-secondary:#486876;--page-bg:radial-gradient(circle at 88% 8%,rgba(0,142,174,.1),transparent 30%),linear-gradient(145deg,#f8fcfd 0%,#edf7fa 52%,#e5f0f4 100%)}
+.hero h1 .surname{color:var(--title-secondary)}
+.monogram{color:color-mix(in srgb,var(--fg) 15%,var(--bg))}
+.stars{background-image:radial-gradient(color-mix(in srgb,var(--fg) 82%,transparent) 1px,transparent 1px),radial-gradient(color-mix(in srgb,var(--accent) 58%,transparent) .8px,transparent .8px)}
+.project-image:after{background:linear-gradient(transparent 48%,color-mix(in srgb,var(--bg) 90%,transparent))}
+::selection{background:color-mix(in srgb,var(--accent) 32%,transparent);color:var(--fg)}
