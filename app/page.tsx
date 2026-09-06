@@ -256,13 +256,15 @@ function MouseHeroEffects() {
 
 function HangingCard() {
   const root = useRef<HTMLDivElement>(null);
-  const path = useRef<SVGPathElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
   const card = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const container = root.current;
-    const rope = path.current;
+    const surface = canvas.current;
     const element = card.current;
-    if (!container || !rope || !element) return;
+    if (!container || !surface || !element) return;
+    const context = surface.getContext("2d");
+    if (!context) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
     const segmentCount = 13;
     const ropeLength = 184;
@@ -277,6 +279,12 @@ function HangingCard() {
     let pointerNear = false;
     let rotation = 0;
     const reset = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      surface.width = Math.round(container.clientWidth * dpr);
+      surface.height = Math.round(container.clientHeight * dpr);
+      surface.style.width = `${container.clientWidth}px`;
+      surface.style.height = `${container.clientHeight}px`;
+      context.setTransform(dpr, 0, 0, dpr, 0, 0);
       const anchorX = container.clientWidth / 2;
       points = Array.from({ length: segmentCount }, (_, index) => {
         const y = (ropeLength * index) / (segmentCount - 1);
@@ -299,28 +307,42 @@ function HangingCard() {
     };
     const movePointer = (event: PointerEvent) => {
       localPointer(event);
-      const rect = element.getBoundingClientRect();
-      const dx = event.clientX - (rect.left + rect.width / 2);
-      const dy = event.clientY - (rect.top + rect.height / 2);
-      pointerNear = Math.hypot(dx, dy) < 150;
+      pointerNear = true;
     };
+    const leavePointer = () => { pointerNear = false; };
     const endDrag = (event: PointerEvent) => {
       if (!dragging || event.pointerId !== pointerId) return;
       dragging = false;
       pointerId = -1;
       element.classList.remove("is-dragging");
     };
-    const smoothPath = () => {
-      if (!points.length) return "";
-      let value = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+    const drawRope = () => {
+      if (!points.length) return;
+      context.clearRect(0, 0, container.clientWidth, container.clientHeight);
+      const light = document.documentElement.dataset.theme === "light";
+      context.beginPath();
+      context.moveTo(points[0].x, points[0].y);
       for (let index = 1; index < points.length - 1; index++) {
         const point = points[index];
         const next = points[index + 1];
-        value += ` Q ${point.x.toFixed(2)} ${point.y.toFixed(2)} ${((point.x + next.x) / 2).toFixed(2)} ${((point.y + next.y) / 2).toFixed(2)}`;
+        context.quadraticCurveTo(point.x, point.y, (point.x + next.x) / 2, (point.y + next.y) / 2);
       }
       const last = points[points.length - 1];
-      value += ` T ${last.x.toFixed(2)} ${last.y.toFixed(2)}`;
-      return value;
+      context.lineTo(last.x, last.y);
+      context.strokeStyle = light ? "rgba(20,20,20,.48)" : "rgba(232,232,228,.44)";
+      context.lineWidth = 1.65;
+      context.lineCap = "round";
+      context.shadowColor = light ? "rgba(0,0,0,.14)" : "rgba(255,255,255,.08)";
+      context.shadowBlur = 3;
+      context.stroke();
+      context.shadowBlur = 0;
+      context.beginPath();
+      context.arc(points[0].x, points[0].y, 5, 0, Math.PI * 2);
+      context.fillStyle = light ? "#eeeae2" : "#080808";
+      context.fill();
+      context.strokeStyle = light ? "rgba(20,20,20,.52)" : "rgba(232,232,228,.48)";
+      context.lineWidth = 2;
+      context.stroke();
     };
     const render = (time: number) => {
       const dt = Math.min(1.7, (time - previous) / 16.667 || 1);
@@ -337,16 +359,21 @@ function HangingCard() {
           point.x += velocityX * dt;
           point.y += velocityY * dt + 0.075 * dt * dt;
         }
+        if (pointerNear && !dragging) {
+          for (let index = 1; index < points.length; index++) {
+            const point = points[index];
+            const dx = point.x - pointerX;
+            const dy = point.y - pointerY;
+            const distance = Math.max(8, Math.hypot(dx, dy));
+            if (distance < 105) {
+              const force = (1 - distance / 105) ** 2 * 0.62;
+              point.x += (dx / distance) * force;
+              point.y += (dy / distance) * force;
+            }
+          }
+        }
         const bottom = points[points.length - 1];
         bottom.x += Math.sin(time * 0.00072) * 0.012;
-        if (pointerNear && !dragging) {
-          const dx = bottom.x - pointerX;
-          const dy = bottom.y + element.offsetHeight / 2 - pointerY;
-          const distance = Math.max(18, Math.hypot(dx, dy));
-          const force = Math.max(0, 1 - distance / 150) * 0.45;
-          bottom.x += (dx / distance) * force;
-          bottom.y += (dy / distance) * force;
-        }
         if (dragging) {
           bottom.x += (pointerX - bottom.x) * 0.36;
           bottom.y += (pointerY - bottom.y) * 0.36;
@@ -382,13 +409,14 @@ function HangingCard() {
       const ropeAngle = Math.atan2(bottom.y - beforeBottom.y, bottom.x - beforeBottom.x) * 180 / Math.PI - 90;
       const targetRotation = Math.max(-13, Math.min(13, ropeAngle * 0.34 + velocityX * 1.35));
       rotation += (targetRotation - rotation) * 0.12;
-      rope.setAttribute("d", smoothPath());
+      drawRope();
       element.style.transform = `translate3d(${(bottom.x - element.offsetWidth / 2).toFixed(2)}px,${bottom.y.toFixed(2)}px,0) rotate(${rotation.toFixed(2)}deg)`;
       frame = requestAnimationFrame(render);
     };
     reset();
     addEventListener("resize", reset);
     addEventListener("pointermove", movePointer, { passive: true });
+    document.documentElement.addEventListener("pointerleave", leavePointer);
     element.addEventListener("pointerdown", beginDrag);
     element.addEventListener("pointermove", movePointer);
     element.addEventListener("pointerup", endDrag);
@@ -397,6 +425,7 @@ function HangingCard() {
     return () => {
       removeEventListener("resize", reset);
       removeEventListener("pointermove", movePointer);
+      document.documentElement.removeEventListener("pointerleave", leavePointer);
       element.removeEventListener("pointerdown", beginDrag);
       element.removeEventListener("pointermove", movePointer);
       element.removeEventListener("pointerup", endDrag);
@@ -406,10 +435,7 @@ function HangingCard() {
   }, []);
   return (
     <div className="hanging-card" ref={root}>
-      <svg className="hanging-rope" aria-hidden="true">
-        <path ref={path} />
-        <circle cx="150" cy="0" r="5" />
-      </svg>
+      <canvas className="hanging-rope" ref={canvas} aria-hidden="true" />
       <div className="badge-card" ref={card} role="button" tabIndex={0} aria-label="Drag the hanging profile card">
         <div className="badge-avatar">♙</div>
         <b>MOHAMMAD MOGHRABY</b>
