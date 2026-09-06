@@ -278,6 +278,7 @@ export function HangingCard() {
     let pointerY = 0;
     let pointerNear = false;
     let rotation = 0;
+    let hoverAmount = 0;
     const reset = () => {
       const dpr = Math.min(devicePixelRatio || 1, 2);
       surface.width = Math.round(container.clientWidth * dpr);
@@ -385,7 +386,10 @@ export function HangingCard() {
           }
         }
         const bottom = points[points.length - 1];
-        bottom.x += Math.sin(time * 0.00072) * 0.012;
+        const idleWave = Math.sin(time * 0.00138);
+        const idleCounterWave = Math.cos(time * 0.00107 + 0.8);
+        bottom.x += idleWave * 0.022;
+        bottom.y += idleCounterWave * 0.006;
         if (dragging) {
           bottom.x += (pointerX - bottom.x) * 0.36;
           bottom.y += (pointerY - bottom.y) * 0.36;
@@ -420,13 +424,22 @@ export function HangingCard() {
       const beforeBottom = points[points.length - 2];
       const velocityX = bottom.x - bottom.oldX;
       const velocityY = bottom.y - bottom.oldY;
+      const cardCenterX = bottom.x;
+      const cardCenterY = bottom.y + element.offsetHeight / 2;
+      const pointerDistance = Math.hypot(pointerX - cardCenterX, pointerY - cardCenterY);
+      const proximity = pointerNear && !dragging ? Math.max(0, 1 - pointerDistance / 175) : dragging ? 0.7 : 0;
+      hoverAmount += (proximity - hoverAmount) * 0.085;
       const ropeAngle = Math.atan2(bottom.y - beforeBottom.y, bottom.x - beforeBottom.x) * 180 / Math.PI - 90;
       const targetRotation = Math.max(-13, Math.min(13, ropeAngle * 0.34 + velocityX * 1.35));
       rotation += (targetRotation - rotation) * 0.12;
       drawRope();
-      const tiltX = Math.max(-5, Math.min(5, velocityY * -0.8));
-      const tiltY = Math.max(-9, Math.min(9, velocityX * 1.15));
-      element.style.transform = `translate3d(${(bottom.x - element.offsetWidth / 2).toFixed(2)}px,${bottom.y.toFixed(2)}px,0) rotateZ(${rotation.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) rotateX(${tiltX.toFixed(2)}deg)`;
+      const pointerTiltX = ((pointerY - cardCenterY) / 175) * -3.5 * hoverAmount;
+      const pointerTiltY = ((pointerX - cardCenterX) / 175) * 5.5 * hoverAmount;
+      const tiltX = Math.max(-6, Math.min(6, velocityY * -0.8 + pointerTiltX));
+      const tiltY = Math.max(-10, Math.min(10, velocityX * 1.15 + pointerTiltY));
+      const scale = 1 + hoverAmount * 0.055;
+      element.style.setProperty("--card-hover-shadow", `${(hoverAmount * 10).toFixed(2)}px`);
+      element.style.transform = `translate3d(${(bottom.x - element.offsetWidth / 2).toFixed(2)}px,${bottom.y.toFixed(2)}px,0) rotateZ(${rotation.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) rotateX(${tiltX.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
       frame = requestAnimationFrame(render);
     };
     reset();
