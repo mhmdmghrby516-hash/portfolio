@@ -537,17 +537,28 @@ export default function Home() {
       accessible: true,
     });
 
-    split.addEffect(({ chars }) =>
-      animate(chars, {
-        opacity: { from: 0 },
-        y: { from: "115%" },
-        rotate: { from: 3 },
-        scale: { from: 0.96 },
-        duration: 950,
-        delay: stagger(28, { start: 140 }),
-        ease: "out(4)",
-      }),
-    );
+    split.addEffect(({ chars }) => {
+      const play = () => {
+        animate(chars, {
+          opacity: { from: 0 },
+          y: { from: "115%" },
+          rotate: { from: 3 },
+          scale: { from: 0.96 },
+          duration: 850,
+          delay: stagger(26),
+          ease: "out(4)",
+        });
+      };
+
+      const target = heroTitle.current;
+      target?.addEventListener("pointerenter", play);
+      target?.addEventListener("pointerdown", play);
+
+      return () => {
+        target?.removeEventListener("pointerenter", play);
+        target?.removeEventListener("pointerdown", play);
+      };
+    });
 
     return () => {
       split.revert();
