@@ -927,23 +927,23 @@ export default function Home() {
           </a>
         </div>
         <footer>
+          <div className="social-pills" aria-label="Social platforms">
+            {socialItems.map(({ name, icon }) => (
+              <button
+                type="button"
+                key={name}
+                aria-label={`${name} link coming soon`}
+              >
+                <span className="social-label">{name}</span>
+                <span className="social-icon" aria-hidden="true">
+                  <i>{icon}</i>
+                  <i>↗</i>
+                </span>
+              </button>
+            ))}
+          </div>
           <div className="copyright">
             © 2026 <b>MOHAMMAD MOGHRABY.</b> All rights reserved.
-          </div>
-          <div className="social-pills" aria-label="Social platforms">
-              {socialItems.map(({ name, icon }) => (
-                <button
-                  type="button"
-                  key={name}
-                  aria-label={`${name} link coming soon`}
-                >
-                  <span className="social-label">{name}</span>
-                  <span className="social-icon" aria-hidden="true">
-                    <i>{icon}</i>
-                    <i>↗</i>
-                  </span>
-                </button>
-              ))}
           </div>
         </footer>
       </section>

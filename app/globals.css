@@ -73,6 +73,11 @@ html{scroll-snap-type:none;scroll-padding-top:0}section[id]{scroll-snap-align:no
 .theme-toggle.is-light .theme-moon{transform:rotate(120deg) scale(.35);opacity:0}
 @media(prefers-reduced-motion:reduce){::view-transition-old(root),::view-transition-new(root){animation:none!important}.theme-toggle span{transition:none}}
 
+/* Keep the legal line beneath the quick-link cards. */
+footer{flex-direction:column;align-items:flex-end;gap:28px}
+footer .copyright{width:min(620px,58vw);justify-content:flex-start;text-align:left}
+@media(max-width:900px){footer{align-items:stretch}footer .copyright{width:100%}}
+
 /* Infinite bottom-to-top hero image reels: two columns on desktop, one on mobile. */
 .portrait-wall{right:3%;top:0;width:46%;height:112%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:1fr;gap:14px;overflow:hidden;transform:rotate(-1deg);mask-image:linear-gradient(to bottom,transparent 0,#000 7%,#000 91%,transparent 100%)}
 .portrait-column{min-width:0;overflow:hidden}
