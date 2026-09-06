@@ -254,98 +254,167 @@ function MouseHeroEffects() {
   );
 }
 
-function DraggableBadge() {
+function HangingCard() {
+  const root = useRef<HTMLDivElement>(null);
+  const path = useRef<SVGPathElement>(null);
   const card = useRef<HTMLDivElement>(null);
-  const position = useRef({ x: 0, y: 0 });
   useEffect(() => {
+    const container = root.current;
+    const rope = path.current;
     const element = card.current;
-    if (!element) return;
-    const rig = element.parentElement;
-    const cord = rig?.querySelector<HTMLElement>(".badge-line");
-    if (!rig || !cord) return;
-    let dragging = false,
-      startX = 0,
-      startY = 0,
-      originX = 0,
-      originY = 0,
-      settleTimer = 0;
-    const syncCord = () => {
-      const dx = position.current.x;
-      const dy = 180 + position.current.y;
-      cord.style.setProperty("--cord-length", `${Math.hypot(dx, dy)}px`);
-      cord.style.setProperty(
-        "--cord-angle",
-        `${((-Math.atan2(dx, dy) * 180) / Math.PI).toFixed(2)}deg`,
-      );
+    if (!container || !rope || !element) return;
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const segmentCount = 13;
+    const ropeLength = 184;
+    type Point = { x: number; y: number; oldX: number; oldY: number };
+    let points: Point[] = [];
+    let frame = 0;
+    let previous = performance.now();
+    let dragging = false;
+    let pointerId = -1;
+    let pointerX = 0;
+    let pointerY = 0;
+    let pointerNear = false;
+    let rotation = 0;
+    const reset = () => {
+      const anchorX = container.clientWidth / 2;
+      points = Array.from({ length: segmentCount }, (_, index) => {
+        const y = (ropeLength * index) / (segmentCount - 1);
+        return { x: anchorX, y, oldX: anchorX, oldY: y };
+      });
     };
-    const move = (event: PointerEvent) => {
-      if (!dragging) return;
-      const maxX = Math.max(
-        35,
-        (rig.clientWidth - element.offsetWidth) / 2 + 35,
-      );
-      const maxY = 90;
-      position.current.x = Math.max(
-        -maxX,
-        Math.min(maxX, originX + event.clientX - startX),
-      );
-      position.current.y = Math.max(
-        -120,
-        Math.min(maxY, originY + event.clientY - startY),
-      );
-      element.style.setProperty("--badge-x", `${position.current.x}px`);
-      element.style.setProperty("--badge-y", `${position.current.y}px`);
-      syncCord();
+    const localPointer = (event: PointerEvent) => {
+      const rect = container.getBoundingClientRect();
+      pointerX = event.clientX - rect.left;
+      pointerY = event.clientY - rect.top;
     };
-    const end = () => {
-      if (!dragging) return;
-      dragging = false;
-      element.classList.remove("is-dragging");
-      element.classList.add("is-settling");
-      cord.classList.add("is-settling");
-      clearTimeout(settleTimer);
-      settleTimer = window.setTimeout(() => {
-        element.classList.remove("is-settling");
-        cord.classList.remove("is-settling");
-      }, 520);
-    };
-    const start = (event: PointerEvent) => {
+    const beginDrag = (event: PointerEvent) => {
       if (event.button !== 0) return;
       dragging = true;
-      startX = event.clientX;
-      startY = event.clientY;
-      originX = position.current.x;
-      originY = position.current.y;
-      element.classList.remove("is-settling");
-      cord.classList.remove("is-settling");
-      element.classList.add("is-dragging", "was-dragged");
-      element.setPointerCapture(event.pointerId);
+      pointerId = event.pointerId;
+      localPointer(event);
+      element.setPointerCapture(pointerId);
+      element.classList.add("is-dragging");
       event.preventDefault();
     };
-    syncCord();
-    element.addEventListener("pointerdown", start);
-    element.addEventListener("pointermove", move);
-    element.addEventListener("pointerup", end);
-    element.addEventListener("pointercancel", end);
+    const movePointer = (event: PointerEvent) => {
+      localPointer(event);
+      const rect = element.getBoundingClientRect();
+      const dx = event.clientX - (rect.left + rect.width / 2);
+      const dy = event.clientY - (rect.top + rect.height / 2);
+      pointerNear = Math.hypot(dx, dy) < 150;
+    };
+    const endDrag = (event: PointerEvent) => {
+      if (!dragging || event.pointerId !== pointerId) return;
+      dragging = false;
+      pointerId = -1;
+      element.classList.remove("is-dragging");
+    };
+    const smoothPath = () => {
+      if (!points.length) return "";
+      let value = `M ${points[0].x.toFixed(2)} ${points[0].y.toFixed(2)}`;
+      for (let index = 1; index < points.length - 1; index++) {
+        const point = points[index];
+        const next = points[index + 1];
+        value += ` Q ${point.x.toFixed(2)} ${point.y.toFixed(2)} ${((point.x + next.x) / 2).toFixed(2)} ${((point.y + next.y) / 2).toFixed(2)}`;
+      }
+      const last = points[points.length - 1];
+      value += ` T ${last.x.toFixed(2)} ${last.y.toFixed(2)}`;
+      return value;
+    };
+    const render = (time: number) => {
+      const dt = Math.min(1.7, (time - previous) / 16.667 || 1);
+      previous = time;
+      const anchorX = container.clientWidth / 2;
+      const segmentLength = ropeLength / (segmentCount - 1);
+      if (!reduced) {
+        for (let index = 1; index < points.length; index++) {
+          const point = points[index];
+          const velocityX = (point.x - point.oldX) * 0.985;
+          const velocityY = (point.y - point.oldY) * 0.985;
+          point.oldX = point.x;
+          point.oldY = point.y;
+          point.x += velocityX * dt;
+          point.y += velocityY * dt + 0.075 * dt * dt;
+        }
+        const bottom = points[points.length - 1];
+        bottom.x += Math.sin(time * 0.00072) * 0.012;
+        if (pointerNear && !dragging) {
+          const dx = bottom.x - pointerX;
+          const dy = bottom.y + element.offsetHeight / 2 - pointerY;
+          const distance = Math.max(18, Math.hypot(dx, dy));
+          const force = Math.max(0, 1 - distance / 150) * 0.45;
+          bottom.x += (dx / distance) * force;
+          bottom.y += (dy / distance) * force;
+        }
+        if (dragging) {
+          bottom.x += (pointerX - bottom.x) * 0.36;
+          bottom.y += (pointerY - bottom.y) * 0.36;
+          bottom.oldX += (bottom.x - bottom.oldX) * 0.08;
+          bottom.oldY += (bottom.y - bottom.oldY) * 0.08;
+        }
+        for (let iteration = 0; iteration < 7; iteration++) {
+          points[0].x = anchorX;
+          points[0].y = 0;
+          for (let index = 0; index < points.length - 1; index++) {
+            const first = points[index];
+            const second = points[index + 1];
+            const dx = second.x - first.x;
+            const dy = second.y - first.y;
+            const distance = Math.max(0.001, Math.hypot(dx, dy));
+            const correction = (distance - segmentLength) / distance;
+            if (index === 0) {
+              second.x -= dx * correction;
+              second.y -= dy * correction;
+            } else {
+              const elasticity = dragging && index === points.length - 2 ? 0.36 : 0.5;
+              first.x += dx * correction * elasticity;
+              first.y += dy * correction * elasticity;
+              second.x -= dx * correction * elasticity;
+              second.y -= dy * correction * elasticity;
+            }
+          }
+        }
+      }
+      const bottom = points[points.length - 1];
+      const beforeBottom = points[points.length - 2];
+      const velocityX = bottom.x - bottom.oldX;
+      const ropeAngle = Math.atan2(bottom.y - beforeBottom.y, bottom.x - beforeBottom.x) * 180 / Math.PI - 90;
+      const targetRotation = Math.max(-13, Math.min(13, ropeAngle * 0.34 + velocityX * 1.35));
+      rotation += (targetRotation - rotation) * 0.12;
+      rope.setAttribute("d", smoothPath());
+      element.style.transform = `translate3d(${(bottom.x - element.offsetWidth / 2).toFixed(2)}px,${bottom.y.toFixed(2)}px,0) rotate(${rotation.toFixed(2)}deg)`;
+      frame = requestAnimationFrame(render);
+    };
+    reset();
+    addEventListener("resize", reset);
+    addEventListener("pointermove", movePointer, { passive: true });
+    element.addEventListener("pointerdown", beginDrag);
+    element.addEventListener("pointermove", movePointer);
+    element.addEventListener("pointerup", endDrag);
+    element.addEventListener("pointercancel", endDrag);
+    frame = requestAnimationFrame(render);
     return () => {
-      clearTimeout(settleTimer);
-      element.removeEventListener("pointerdown", start);
-      element.removeEventListener("pointermove", move);
-      element.removeEventListener("pointerup", end);
-      element.removeEventListener("pointercancel", end);
+      removeEventListener("resize", reset);
+      removeEventListener("pointermove", movePointer);
+      element.removeEventListener("pointerdown", beginDrag);
+      element.removeEventListener("pointermove", movePointer);
+      element.removeEventListener("pointerup", endDrag);
+      element.removeEventListener("pointercancel", endDrag);
+      cancelAnimationFrame(frame);
     };
   }, []);
   return (
-    <div
-      className="badge-card"
-      ref={card}
-      role="button"
-      tabIndex={0}
-      aria-label="Drag to move profile badge"
-    >
-      <div className="badge-avatar">♙</div>
-      <b>MOHAMMAD MOGHRABY</b>
-      <span>Web Developer</span>
+    <div className="hanging-card" ref={root}>
+      <svg className="hanging-rope" aria-hidden="true">
+        <path ref={path} />
+        <circle cx="150" cy="0" r="5" />
+      </svg>
+      <div className="badge-card" ref={card} role="button" tabIndex={0} aria-label="Drag the hanging profile card">
+        <div className="badge-avatar">♙</div>
+        <b>MOHAMMAD MOGHRABY</b>
+        <span>Web Developer</span>
+      </div>
     </div>
   );
 }
@@ -668,11 +737,7 @@ export default function Home() {
           <aside className="about-side">
             <SectionTitle number="001" title="About" />
             <div className="badge-rig reveal">
-              <div className="badge-line" aria-hidden="true">
-                <i />
-                <i />
-              </div>
-              <DraggableBadge />
+              <HangingCard />
             </div>
           </aside>
           <div className="about-copy">
