@@ -118,6 +118,9 @@ nav button{position:relative;padding:10px 0;opacity:.62;transition:color .3s eas
 .controls button{position:relative;isolation:isolate;overflow:hidden;transition:background .5s ease,color .5s ease,border-color .5s ease,transform .5s ease}.controls button:before{content:"";position:absolute;z-index:-1;inset:-20%;width:18px;height:140%;background:color-mix(in srgb,var(--bg) 22%,transparent);transform:translateX(-70px) skewX(-13deg);transition:transform 0s}.controls button:hover,.controls button:focus-visible{background:var(--fg);color:var(--bg);border-color:color-mix(in srgb,var(--fg) 30%,transparent);transform:translateY(-1px)}.controls button:hover:before,.controls button:focus-visible:before{transform:translateX(105px) skewX(-13deg);transition:transform 1s ease}.controls button:hover .theme-sun,.controls button:hover .theme-moon{rotate:12deg}
 @media(prefers-reduced-motion:reduce){nav button:after,.controls button,.controls button:before{transition:none!important}}
 
+/* Subtle 3D depth for the Canvas-driven hanging card */
+.hanging-card{perspective:850px}.hanging-card .badge-card{transform-style:preserve-3d;backface-visibility:hidden;background:linear-gradient(145deg,color-mix(in srgb,var(--fg) 97%,transparent),color-mix(in srgb,var(--fg) 86%,var(--bg)));box-shadow:0 30px 70px #0006,0 1px 0 color-mix(in srgb,var(--bg) 12%,transparent) inset}.hanging-card .badge-card:after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,color-mix(in srgb,#fff 18%,transparent),transparent 35% 70%,color-mix(in srgb,var(--bg) 8%,transparent));opacity:.7}.hanging-card .badge-avatar,.hanging-card .badge-card b,.hanging-card .badge-card span{position:relative;z-index:1;transform:translateZ(8px)}
+
 /* Circular theme reveal powered by the native View Transitions API. */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){z-index:1}

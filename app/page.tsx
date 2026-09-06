@@ -254,7 +254,7 @@ function MouseHeroEffects() {
   );
 }
 
-function HangingCard() {
+export function HangingCard() {
   const root = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
   const card = useRef<HTMLDivElement>(null);
@@ -301,12 +301,14 @@ function HangingCard() {
       dragging = true;
       pointerId = event.pointerId;
       localPointer(event);
+      pointerY = Math.max(8, pointerY);
       element.setPointerCapture(pointerId);
       element.classList.add("is-dragging");
       event.preventDefault();
     };
     const movePointer = (event: PointerEvent) => {
       localPointer(event);
+      pointerY = Math.max(8, pointerY);
       pointerNear = true;
     };
     const leavePointer = () => { pointerNear = false; };
@@ -329,7 +331,17 @@ function HangingCard() {
       }
       const last = points[points.length - 1];
       context.lineTo(last.x, last.y);
-      context.strokeStyle = light ? "rgba(20,20,20,.48)" : "rgba(232,232,228,.44)";
+      const ropeGradient = context.createLinearGradient(points[0].x - 3, 0, points[0].x + 5, 0);
+      if (light) {
+        ropeGradient.addColorStop(0, "rgba(15,15,15,.18)");
+        ropeGradient.addColorStop(0.48, "rgba(15,15,15,.62)");
+        ropeGradient.addColorStop(1, "rgba(255,255,255,.24)");
+      } else {
+        ropeGradient.addColorStop(0, "rgba(0,0,0,.42)");
+        ropeGradient.addColorStop(0.5, "rgba(238,238,235,.58)");
+        ropeGradient.addColorStop(1, "rgba(255,255,255,.14)");
+      }
+      context.strokeStyle = ropeGradient;
       context.lineWidth = 1.65;
       context.lineCap = "round";
       context.shadowColor = light ? "rgba(0,0,0,.14)" : "rgba(255,255,255,.08)";
@@ -367,8 +379,8 @@ function HangingCard() {
             const distance = Math.max(8, Math.hypot(dx, dy));
             if (distance < 105) {
               const force = (1 - distance / 105) ** 2 * 0.62;
-              point.x += (dx / distance) * force;
-              point.y += (dy / distance) * force;
+              point.x -= (dx / distance) * force;
+              point.y -= (dy / distance) * force;
             }
           }
         }
@@ -400,17 +412,21 @@ function HangingCard() {
               second.x -= dx * correction * elasticity;
               second.y -= dy * correction * elasticity;
             }
+            second.y = Math.max(0, second.y);
           }
         }
       }
       const bottom = points[points.length - 1];
       const beforeBottom = points[points.length - 2];
       const velocityX = bottom.x - bottom.oldX;
+      const velocityY = bottom.y - bottom.oldY;
       const ropeAngle = Math.atan2(bottom.y - beforeBottom.y, bottom.x - beforeBottom.x) * 180 / Math.PI - 90;
       const targetRotation = Math.max(-13, Math.min(13, ropeAngle * 0.34 + velocityX * 1.35));
       rotation += (targetRotation - rotation) * 0.12;
       drawRope();
-      element.style.transform = `translate3d(${(bottom.x - element.offsetWidth / 2).toFixed(2)}px,${bottom.y.toFixed(2)}px,0) rotate(${rotation.toFixed(2)}deg)`;
+      const tiltX = Math.max(-5, Math.min(5, velocityY * -0.8));
+      const tiltY = Math.max(-9, Math.min(9, velocityX * 1.15));
+      element.style.transform = `translate3d(${(bottom.x - element.offsetWidth / 2).toFixed(2)}px,${bottom.y.toFixed(2)}px,0) rotateZ(${rotation.toFixed(2)}deg) rotateY(${tiltY.toFixed(2)}deg) rotateX(${tiltX.toFixed(2)}deg)`;
       frame = requestAnimationFrame(render);
     };
     reset();
