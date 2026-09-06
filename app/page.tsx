@@ -739,8 +739,14 @@ export default function Home() {
     <main>
       <MouseHeroEffects />
       <header>
-        <button className="brand" onClick={() => jump("#home")}>
-          MOGHRABY
+        <button className="brand" onClick={() => jump("#home")}> 
+          <span className="brand-mark" aria-hidden="true">
+            <b>M</b><i>/</i>
+          </span>
+          <span className="brand-copy">
+            <strong>MOGHRABY</strong>
+            <small>WEB DEVELOPER</small>
+          </span>
         </button>
         <nav className={menu ? "open" : ""}>
           {["Home", "About", "Stack", "Projects", "Roadmap", "Contact"].map(

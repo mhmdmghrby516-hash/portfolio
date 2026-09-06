@@ -248,3 +248,16 @@ footer{align-items:center}
 :root[data-theme="light"] .hero h1 .given-name span{color:#073c50}
 :root[data-theme="light"] .hero h1 .surname,
 :root[data-theme="light"] .hero h1 .surname span{color:#167b96}
+
+/* Compact developer monogram and wordmark. */
+.brand{display:flex;align-items:center;gap:10px;text-align:left;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.brand-mark{position:relative;width:38px;height:38px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--accent) 55%,var(--line));border-radius:11px;background:color-mix(in srgb,var(--panel) 76%,transparent);box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 8%,transparent);overflow:hidden}
+.brand-mark:after{content:"";position:absolute;right:-8px;bottom:-8px;width:22px;height:22px;border-radius:50%;background:var(--accent);opacity:.18}
+.brand-mark b{font-size:1rem;line-height:1;letter-spacing:-.08em;transform:translateX(-2px)}
+.brand-mark i{position:absolute;right:7px;top:6px;color:var(--accent);font:800 .72rem/1 monospace;font-style:normal}
+.brand-copy{display:flex;flex-direction:column;gap:2px}
+.brand-copy strong{font-size:1.02rem;line-height:1;letter-spacing:.035em}
+.brand-copy small{color:var(--muted);font:600 .46rem/1 monospace;letter-spacing:.19em}
+.brand:hover{transform:translateY(-2px)}
+.brand:hover .brand-mark{border-color:var(--accent);box-shadow:0 10px 28px var(--accent-soft)}
+@media(max-width:560px){.brand{gap:8px}.brand-mark{width:34px;height:34px;border-radius:10px}.brand-copy strong{font-size:.9rem}.brand-copy small{font-size:.4rem;letter-spacing:.14em}}
