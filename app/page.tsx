@@ -780,7 +780,7 @@ export default function Home() {
         <div className="hero-copy reveal visible">
           <p className="eyebrow">WEB DEVELOPER · 2026</p>
           <h1 ref={heroTitle}>
-            MOHAMMAD
+            <span className="given-name">MOHAMMAD</span>
             <br />
             <span className="surname">MOGHRABY</span>
           </h1>

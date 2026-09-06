@@ -242,3 +242,9 @@ footer .copyright{width:min(820px,90vw)}
 /* Center the quick-link group within the footer. */
 footer{align-items:center}
 .social-pills{margin-inline:auto}
+
+/* Distinct, high-contrast name tones in the light theme. */
+:root[data-theme="light"] .hero h1 .given-name,
+:root[data-theme="light"] .hero h1 .given-name span{color:#073c50}
+:root[data-theme="light"] .hero h1 .surname,
+:root[data-theme="light"] .hero h1 .surname span{color:#167b96}
