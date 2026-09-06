@@ -147,8 +147,8 @@ function MouseHeroEffects() {
           y: homeY,
           vx: 0,
           vy: 0,
-          radius: i % 29 === 0 ? 1.8 : i % 7 === 0 ? 1.15 : 0.55,
-          alpha: 0.12 + seeded(i * 5 + 4) * 0.38,
+          radius: i % 29 === 0 ? 2 : i % 7 === 0 ? 1.3 : 0.68,
+          alpha: 0.18 + seeded(i * 5 + 4) * 0.46,
           phase: seeded(i * 7 + 8) * Math.PI * 2,
           speed: 0.00018 + seeded(i * 11 + 3) * 0.00022,
           range: 7 + seeded(i * 13 + 6) * 18,
@@ -211,10 +211,10 @@ function MouseHeroEffects() {
           ? 0.7 + 0.3 * Math.sin(time * 0.002 + particle.phase)
           : 0.82 + 0.18 * Math.sin(time * 0.001 + particle.phase);
         context.beginPath();
-        context.fillStyle = `rgba(${color},${Math.max(0.04, particle.alpha * twinkle)})`;
+        context.fillStyle = `rgba(${color},${Math.max(0.075, particle.alpha * twinkle)})`;
         if (particle.star) {
-          context.shadowColor = `rgba(${color},.55)`;
-          context.shadowBlur = 10;
+          context.shadowColor = `rgba(${color},.68)`;
+          context.shadowBlur = 12;
         } else context.shadowBlur = 0;
         context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
         context.fill();
@@ -623,14 +623,9 @@ export default function Home() {
       const vh = innerHeight;
       if (timeline) {
         const rect = timeline.getBoundingClientRect();
-        const start = vh * 0.72;
-        const finish = vh * 0.28;
         const progress = Math.max(
           0,
-          Math.min(
-            1,
-            (start - rect.top) / Math.max(1, rect.height + start - finish),
-          ),
+          Math.min(1, (vh * 0.52 - rect.top) / Math.max(1, rect.height)),
         );
         timeline.style.setProperty("--timeline-progress", progress.toFixed(4));
         const entries = Array.from(
