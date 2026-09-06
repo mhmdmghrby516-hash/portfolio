@@ -130,6 +130,10 @@ nav button{position:relative;padding:10px 0;opacity:.62;transition:color .3s eas
 /* Scroll-driven roadmap illumination */
 .timeline-fill{background:linear-gradient(to bottom,var(--fg),color-mix(in srgb,var(--fg) 72%,var(--muted)));box-shadow:0 0 10px color-mix(in srgb,var(--fg) 42%,transparent),0 0 22px color-mix(in srgb,var(--fg) 18%,transparent)}
 
+/* Restrained cyan accent system */
+:root{--accent:#00d4ff;--accent-soft:rgba(0,212,255,.18)}:root[data-theme="light"]{--accent:#008eae;--accent-soft:rgba(0,142,174,.16)}
+nav button:after{background:var(--accent);box-shadow:0 0 9px var(--accent-soft)}.hero-cursor span{background:var(--accent);box-shadow:0 0 12px color-mix(in srgb,var(--accent) 72%,transparent)}.timeline-fill{background:linear-gradient(to bottom,var(--accent),color-mix(in srgb,var(--accent) 52%,var(--fg)));box-shadow:0 0 12px color-mix(in srgb,var(--accent) 52%,transparent),0 0 26px color-mix(in srgb,var(--accent) 22%,transparent)}.year.is-active .year-dot,.year:hover .year-dot{border-color:color-mix(in srgb,var(--accent) 62%,var(--line));box-shadow:0 0 28px var(--accent-soft)}.year.is-active .year-dot i,.year:hover .year-dot i{background:var(--accent);box-shadow:0 0 15px color-mix(in srgb,var(--accent) 68%,transparent)}.about-link:hover{border-color:var(--accent)}.primary:hover{border-color:color-mix(in srgb,var(--accent) 45%,transparent);box-shadow:0 18px 45px var(--accent-soft)}
+
 /* Circular theme reveal powered by the native View Transitions API. */
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 ::view-transition-old(root){z-index:1}

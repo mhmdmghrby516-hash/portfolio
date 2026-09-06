@@ -211,9 +211,10 @@ function MouseHeroEffects() {
           ? 0.7 + 0.3 * Math.sin(time * 0.002 + particle.phase)
           : 0.82 + 0.18 * Math.sin(time * 0.001 + particle.phase);
         context.beginPath();
-        context.fillStyle = `rgba(${color},${Math.max(0.075, particle.alpha * twinkle)})`;
+        const particleColor = particle.star ? "0,212,255" : color;
+        context.fillStyle = `rgba(${particleColor},${Math.max(0.075, particle.alpha * twinkle)})`;
         if (particle.star) {
-          context.shadowColor = `rgba(${color},.68)`;
+          context.shadowColor = "rgba(0,212,255,.72)";
           context.shadowBlur = 12;
         } else context.shadowBlur = 0;
         context.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
