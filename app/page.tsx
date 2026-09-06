@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { flushSync } from "react-dom";
+import MotionHangingCard from "./components/HangingCard";
 const portraits = [
   "makise-kurisu-2.webp",
   "atam-1.webp",
@@ -792,7 +793,7 @@ export default function Home() {
           <aside className="about-side">
             <SectionTitle number="001" title="About" />
             <div className="badge-rig reveal">
-              <HangingCard />
+              <MotionHangingCard />
             </div>
           </aside>
           <div className="about-copy">
