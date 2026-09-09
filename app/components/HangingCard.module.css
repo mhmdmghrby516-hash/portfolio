@@ -2,3 +2,7 @@
 @media(max-width:900px){.root{position:relative;height:340px}.cardPosition{width:132px}.avatar{width:68px;height:68px;font-size:2rem}}
 @media(prefers-reduced-motion:reduce){.card,.cardPosition,.ropePath{transition:none!important;animation:none!important}.cardPosition{cursor:default}.card{transform:none!important}}
 .card:hover{border-color:color-mix(in srgb,var(--accent) 38%,var(--fg));box-shadow:0 31px 68px #0008,0 0 24px var(--accent-soft),0 1px 0 color-mix(in srgb,var(--fg) 10%,transparent) inset}.connector{border-color:color-mix(in srgb,var(--accent) 38%,var(--fg));box-shadow:0 0 10px var(--accent-soft)}
+
+/* The pendulum can travel outside its small layout box, like the reference. */
+.root{contain:layout style;overflow:visible}
+.cardPosition{transform-origin:50% 0}
