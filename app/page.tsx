@@ -517,8 +517,22 @@ export function startCircularThemeTransition(
 export default function Home() {
   const [light, setLight] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
   const projectTrack = useRef<HTMLDivElement>(null);
   const heroTitle = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (!aboutOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setAboutOpen(false);
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [aboutOpen]);
   useEffect(() => {
     if (
       !heroTitle.current ||
@@ -854,12 +868,53 @@ export default function Home() {
               <i>web</i> and <i>desktop</i> applications. I enjoy working with
               simple, <b>practical</b>, and <b>sustainable</b> tools.
             </p>
-            <button className="about-link reveal">
+            <button className="about-link reveal" onClick={() => setAboutOpen(true)} aria-haspopup="dialog">
               READ FULL VERSION <span>→</span>
             </button>
           </div>
         </div>
       </section>
+      {aboutOpen && (
+        <div className="about-modal-backdrop" onPointerDown={() => setAboutOpen(false)}>
+          <section
+            className="about-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="about-modal-title"
+            onPointerDown={(event) => event.stopPropagation()}
+          >
+            <button
+              className="about-modal-close"
+              type="button"
+              onClick={() => setAboutOpen(false)}
+              aria-label="Close about dialog"
+              autoFocus
+            >
+              ×
+            </button>
+            <h2 id="about-modal-title">About</h2>
+            <div className="about-modal-copy">
+              <p>
+                Hi, I’m <strong>Mohammad Moghraby</strong>, a web developer focused on building clean,
+                practical, and sustainable digital experiences through continuous learning and experimentation.
+              </p>
+              <p>
+                I work across modern web technologies such as <em>React, Next.js, TypeScript, Tailwind CSS,</em>
+                and <em>Framer Motion</em>. On the backend, I use tools including <em>Laravel, Node.js, ASP.NET,</em>
+                and databases such as <em>PostgreSQL, MySQL,</em> and <em>MongoDB</em>.
+              </p>
+              <p>
+                I enjoy turning ideas into responsive interfaces and useful systems. I care about readable code,
+                thoughtful details, reliable structure, and motion that supports the experience rather than distracting from it.
+              </p>
+              <p>
+                My current goal is to deepen my skills in <strong>full-stack development and system design</strong>,
+                while creating products that are simple to use, maintainable, and built to grow.
+              </p>
+            </div>
+          </section>
+        </div>
+      )}
       <Marquee />
       <section id="stack" className="content-section">
         <SectionTitle number="002" title="Stack" />

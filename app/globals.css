@@ -275,3 +275,18 @@ footer{align-items:center}
 .brand-logo{display:block;width:100%;height:100%;object-fit:contain}
 .brand:hover .brand-logo-shell{border-color:color-mix(in srgb,var(--accent) 75%,transparent);box-shadow:0 12px 32px var(--accent-soft)}
 @media(max-width:560px){.brand-logo-shell{width:76px;height:62px;padding:4px 6px;border-radius:11px}}
+
+/* Full About dialog */
+.about-modal-backdrop{position:fixed;z-index:2000;inset:0;padding:24px;display:grid;place-items:center;background:color-mix(in srgb,#000 68%,transparent);backdrop-filter:blur(13px);animation:about-backdrop-in .3s ease both}
+.about-modal{position:relative;width:min(660px,100%);max-height:min(82vh,720px);overflow:auto;padding:38px 40px 34px;border:1px solid color-mix(in srgb,var(--fg) 14%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--panel) 96%,#05070b);color:var(--fg);box-shadow:0 38px 100px #0009,0 1px 0 color-mix(in srgb,var(--fg) 6%,transparent) inset;animation:about-dialog-in .38s cubic-bezier(.2,.8,.2,1) both}
+.about-modal h2{margin:0 54px 25px 0;font-size:1.55rem;letter-spacing:-.025em}
+.about-modal-copy{display:flex;flex-direction:column;gap:21px}
+.about-modal-copy p{margin:0;color:var(--muted);font-size:.94rem;line-height:1.65}
+.about-modal-copy strong{color:var(--fg);font-weight:750}
+.about-modal-copy em{color:var(--fg);font-family:Georgia,serif;font-size:1.04em}
+.about-modal-close{position:absolute;top:14px;right:14px;width:40px;height:40px;display:grid;place-items:center;border:1px solid color-mix(in srgb,var(--fg) 52%,var(--line));border-radius:50%;background:color-mix(in srgb,var(--bg) 62%,transparent);color:var(--fg);font-size:1.45rem;line-height:1;box-shadow:0 0 0 3px color-mix(in srgb,var(--fg) 7%,transparent);transition:transform .3s ease,background .3s ease,color .3s ease}
+.about-modal-close:hover,.about-modal-close:focus-visible{transform:rotate(90deg);background:var(--fg);color:var(--bg)}
+@keyframes about-backdrop-in{from{opacity:0}to{opacity:1}}
+@keyframes about-dialog-in{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
+@media(max-width:560px){.about-modal-backdrop{padding:14px}.about-modal{max-height:86vh;padding:30px 22px 26px;border-radius:12px}.about-modal h2{font-size:1.35rem}.about-modal-copy{gap:17px}.about-modal-copy p{font-size:.88rem;line-height:1.58}.about-modal-close{top:11px;right:11px;width:36px;height:36px}}
+@media(prefers-reduced-motion:reduce){.about-modal-backdrop,.about-modal{animation:none}.about-modal-close{transition:none}}
