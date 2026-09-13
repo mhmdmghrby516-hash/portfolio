@@ -739,13 +739,15 @@ export default function Home() {
     <main>
       <MouseHeroEffects />
       <header>
-        <button className="brand" onClick={() => jump("#home")}> 
-          <span className="brand-mark" aria-hidden="true">
-            <b>M</b><i>/</i>
-          </span>
-          <span className="brand-copy">
-            <strong>MOGHRABY</strong>
-            <small>WEB DEVELOPER</small>
+        <button className="brand" onClick={() => jump("#home")} aria-label="Back to home">
+          <span className="brand-logo-shell">
+            <img
+              className="brand-logo"
+              src="brand-logo.png"
+              width="883"
+              height="741"
+              alt="Mohammad Moghraby — Web Developer"
+            />
           </span>
         </button>
         <nav className={menu ? "open" : ""}>
